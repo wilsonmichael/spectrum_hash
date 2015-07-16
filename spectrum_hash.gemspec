@@ -8,10 +8,10 @@ Gem::Specification.new do |spec|
   spec.version       = SpectrumHash::VERSION
   spec.authors       = ["Michael Wilson"]
   spec.email         = ["michael.wilson@ualberta.ca"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{A library for hashing mass spectra data following the splash definition.}
+  spec.description   = %q{A library for hashing mass spectra data following the splash definition.}
   spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.license       = "GPL"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
