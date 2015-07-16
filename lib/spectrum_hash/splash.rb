@@ -9,7 +9,7 @@ module SpectrumHash
     RELATIVE_INTENSITY_SCALE = 1000.0
 
     # Separator for building spectrum strings
-    PEAK_SEPARATOR = ' '
+    PEAK_LIST_SEPARATOR = ' '
 
     # Full spectrum hash properties
     PEAK_PAIR_SEPARATOR = ':'
@@ -98,49 +98,43 @@ module SpectrumHash
     end
 
     def round(number)
-      format "%.#{PRECISION}f", 1.0
+      #format "%.#{PRECISION}f", number
+      (number * 10**6).to_i
     end
 
-    # Create a standard string from a peak list
-    #
-    # Example:
-    #
-    # 1.000001:200.000001 2.000001:150.000001 3.000001:100.000001
-    #
-    def stringify_peaks(peaks)
-      peaks.map do |peak|
-        # Round the values before joining
-        peak.map{|value| round(value) }.join(PEAK_SEPARATOR)
-      end.join(PEAK_PAIR_SEPARATOR)
-    end
-
-    # A hash of the Top 10 peaks, which is a reduced spectral representation that
-    # encodes the top 10 peaks without intensities sorted by descending intensity
-    # and then mass-to-charge ratios m/z. The m/z are saved to 6 digits and a
-    # SHA256 is calculated in hexadecimal notation and then truncated to 10
-    # characters.
+    # A hash of the Top 10 peaks, which is a reduced spectral representation
+    # that encodes the top 10 peaks without intensities sorted by descending
+    # intensity and then by increasing mass-to-charge ratios m/z. The m/z
+    # values are multiplied by 10^6, casted to long (64 bit) integers, and
+    # joined as strings using a single space as a delimiter.  A SHA256 is then
+    # calculated in hexadecimal notation and then truncated to 10 characters.
     def top_peaks_block
       sha_digest top_peaks_string, MAX_HASH_CHARACTERS_TOP_PEAKS
     end
 
     def top_peaks_string
-      stringify_peaks top_peaks
+      top_peaks.map(&:first).map{|value| round(value)}.join(PEAK_LIST_SEPARATOR)
     end
 
     def top_peaks
       spectrum_sorted_for_top_peaks[0,MAX_TOP_PEAKS]
     end
 
-    # A hash of the full spectrum (m/z and relative intensities, sorted by
-    # ascending m/z and then by descending intensity with m/z and intensity given
-    # to 6 digits) in SHA256, calculated in hexadecimal notation and truncated to
-    # 20 characters.
+    # A hash of the full spectrum in SHA256, calculated in hexadecimal notation
+    # and truncated to 20 characters.  The full spectrum string consists of m/z
+    # and relative intensity pairs sorted by ascending m/z and then by
+    # descending intensity.  Both values are multiplied by 10^6, casted to long
+    # (64 bit) integers, and joined as strings using a colon as a separator.
+    # All such ion pairs are then joined using a single space as a delimiter.
     def full_spectrum_block
       sha_digest full_spectrum_string, MAX_HASH_CHARACTERS_FULL_SPECTRUM
     end
 
     def full_spectrum_string
-      stringify_peaks full_spectrum
+      full_spectrum.map do |peak|
+        # Round the values before joining
+        peak.map{|value| round(value) }.join(PEAK_PAIR_SEPARATOR)
+      end.join(PEAK_LIST_SEPARATOR)
     end
 
     def full_spectrum
@@ -162,7 +156,7 @@ module SpectrumHash
         # then sum the products
         reduce(0,&:+).
         # then truncate
-        round
+        floor
     end
 
     def similarity_block_peaks
