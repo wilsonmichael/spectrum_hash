@@ -1,6 +1,8 @@
 # SpectrumHash
 
-TODO: Write a gem description
+A library for hashing mass spectra data following the splash definition.
+
+Paper in progress...
 
 ## Installation
 
