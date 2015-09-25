@@ -43,17 +43,6 @@ module SpectrumHash
       @spectrum_type = spectrum_type
     end
 
-    def self.splash_from_string(spectrum_string, spectrum_type)
-      peaks = spectrum_string.split(/\n/).map do |line|
-        line.split(/\s+/).map(&:to_f)
-      end
-      self.splash_from_peaks(peaks,spectrum_type)
-    end
-
-    def self.splash_from_peaks(spectrum, spectrum_type)
-      self.new(spectrum,spectrum_type).splash
-    end
-
     # Return the splash of the form:
     #
     # splash{spectra type}{spectra version}-{top peaks block}-{full spectrum block}-{similarity block}
