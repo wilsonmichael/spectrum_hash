@@ -22,9 +22,13 @@ module SpectrumHash
       # VALIDATE
     end
 
+    RETRIES    = 3
+    RETRY_WAIT = 0.1
+
+    # TODO handle retries
     def fetch!
       @response = fetch_splash
-      @splash   = @response.body
+      @splash = @response.body
     end
 
     def peak_list
