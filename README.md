@@ -52,7 +52,6 @@ spectrum = <<-TXT
 1026.834 1193619.381
 TXT
 
-splash = SpectrumHash.from_string(spectrum)
 SpectrumHash.from_string(spectrum).splash
 # => "splash10-z400010000-d64778f5782df78f3910"
 ```
@@ -85,13 +84,10 @@ splash.histogram_list
 
 ```
 
-Load splashes and compare two splashes
+Get the manhattan distance between the histogram blocks of two splashes
 ```ruby
 splash1 = SpectrumHash.from_splash_string "splash10-z400010000-d64778f5782df78f3910"
-
 splash2 = SpectrumHash.from_splash_string "splash10-z40h010000-d349672ea211ef542549"
-
-# Returns the manhattan distance between the hashes
 splash1.distance_to splash2
 # => 17
 ```
