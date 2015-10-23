@@ -20,7 +20,9 @@ Or install it yourself as:
 
 ## Usage
 
-To generate a hash:
+Splash stands for the spectra hash code and is an unique identifier independent of acquisition or processing. It basically tries to ensure that you can easily tell if two spectra are identical, similar or very different. Based on several criteria.
+
+This library simply wraps the REST API available at http://splash.fiehnlab.ucdavis.edu/ It also has some convenient methods to work with splashes.
 
 Create a splash from a peak list.
 ```ruby
