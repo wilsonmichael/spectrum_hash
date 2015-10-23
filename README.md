@@ -20,7 +20,81 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To generate a hash:
+
+Create a splash from a peak list.
+```ruby
+require 'spectrum_hash'
+
+spectrum = [
+  [  41.982,  4383598.000],
+  [  56.450,   867285.813],
+  [  69.408,  1181789.750],
+  [  83.625,  1009049.375],
+  [ 123.006,  1119260.125],
+  [ 538.356,   421962.563],
+  [1026.834,  1193619.381]
+]
+
+SpectrumHash.from_peaks(spectrum).splash
+# => "splash10-z400010000-d64778f5782df78f3910"
+```
+
+Create a splash from a tab delimited list of peaks and strings.
+```ruby
+spectrum = <<-TXT
+41.982  4383598.000
+56.450 	867285.813
+69.408 	1181789.750
+83.625 	1009049.375
+123.006 	1119260.125
+138.356 	421962.563
+1026.834 1193619.381
+TXT
+
+splash = SpectrumHash.from_string(spectrum)
+SpectrumHash.from_string(spectrum).splash
+# => "splash10-z400010000-d64778f5782df78f3910"
+```
+
+There are a couple methods to get the different components of the
+splash
+```ruby
+
+splash = SpectrumHash.from_splash_string "splash10-z40h010000-d349672ea211ef542549"
+
+# print the version number for the splash
+splash.version
+# => "1"
+
+# print the full version block
+splash.version_block
+# => "splash10"
+
+# print the histogram block
+splash.histogram_block
+# => "z40h010000"
+
+# print the hash block
+splash.hash_block
+# => "d349672ea211ef542549"
+
+# get the histogram as a list of integers (handy for comparisons)
+splash.histogram_list
+# => [35, 4, 0, 17, 0, 1, 0, 0, 0, 0]
+
+```
+
+Load splashes and compare two splashes
+```ruby
+splash1 = SpectrumHash.from_splash_string "splash10-z400010000-d64778f5782df78f3910"
+
+splash2 = SpectrumHash.from_splash_string "splash10-z40h010000-d349672ea211ef542549"
+
+# Returns the manhattan distance between the hashes
+splash1.distance_to splash2
+# => 17
+```
 
 ## Contributing
 
