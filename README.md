@@ -1,6 +1,8 @@
 # SpectrumHash
 
-A library for hashing mass spectra data following the splash definition.
+A library for creating a Splash keys following the splash definition. Splash stands for the spectra hash code and is an unique identifier independent of acquisition or processing. It basically tries to ensure that you can easily tell if two spectra are identical, similar or very different. Based on several criteria.
+
+This library simply wraps the REST API available at http://splash.fiehnlab.ucdavis.edu/ It also has some convenient methods to work with splashes.
 
 Paper in progress...
 
@@ -20,14 +22,11 @@ Or install it yourself as:
 
 ## Usage
 
-Splash stands for the spectra hash code and is an unique identifier independent of acquisition or processing. It basically tries to ensure that you can easily tell if two spectra are identical, similar or very different. Based on several criteria.
-
-This library simply wraps the REST API available at http://splash.fiehnlab.ucdavis.edu/ It also has some convenient methods to work with splashes.
-
 Create a splash from a peak list.
 ```ruby
 require 'spectrum_hash'
 
+# List of m/z and intensity for each peak
 spectrum = [
   [  41.982,  4383598.000],
   [  56.450,   867285.813],
