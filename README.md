@@ -26,6 +26,7 @@ Create a splash from a peak list.
 ```ruby
 require 'spectrum_hash'
 
+# List of m/z and intensity for each peak
 spectrum = [
   [  41.982,  4383598.000],
   [  56.450,   867285.813],
