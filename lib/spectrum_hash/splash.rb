@@ -18,8 +18,10 @@ module SpectrumHash
       @spectrum_type = options[:spectrum_type] || DEFAULT_SPECTRUM_TYPE
       @api_uri       = options[:uri]           || DEFAULT_SPLASH_API_URI
 
-      fetch!
-      # VALIDATE
+      # Load the splash if given
+      @splash = options[:splash]
+
+      fetch! if @splash.nil?
     end
 
     RETRIES    = 3
@@ -27,6 +29,7 @@ module SpectrumHash
 
     # TODO handle retries
     def fetch!
+      return @splash unless @splash.nil?
       @response = fetch_splash
       @splash = @response.body
     end
@@ -62,6 +65,23 @@ module SpectrumHash
 
     def hash_block
       split_splash[2]
+    end
+
+    def histogram_list
+      @histogram_list ||= histogram_block.chars.map{|v| v.to_i(36) }
+    end
+
+    def to_s
+      splash
+    end
+
+    def distance_to(other)
+      sum = 0
+      other_histo = other.histogram_list
+      histogram_list.each.with_index(0) do |my_value,i|
+        sum += ( my_value - other_histo[i] ).abs
+      end
+      sum
     end
 
     private
