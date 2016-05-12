@@ -59,12 +59,16 @@ module SpectrumHash
       split_splash[0]
     end
 
-    def histogram_block
+    def top_ten_block
       split_splash[1]
     end
 
-    def hash_block
+    def histogram_block
       split_splash[2]
+    end
+
+    def hash_block
+      split_splash[3]
     end
 
     def histogram_list
