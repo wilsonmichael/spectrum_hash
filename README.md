@@ -4,7 +4,27 @@ A library for creating a Splash keys following the splash definition. Splash sta
 
 This library simply wraps the REST API available at http://splash.fiehnlab.ucdavis.edu/ It also has some convenient methods to work with splashes.
 
-Paper in progress...
+Citing SPLASH:
+
+Wohlgemuth, G, et al., SPLASH, a Hashed Identifier for Mass Spectra. Nature Biotechnology 34, 1099-101 (2016). 
+
+# Quick Intro to SPLASH
+
+The SPLASH is an unambiguous, database-independent spectral identifier, just as the InChIKey is designed to serve as a unique identifier for chemical structures. It contains separate blocks that define different layers of information, separated by dashes. For example, the full SPLASH of a caffeine mass spectrum above is splash10-0002-0900000000-b112e4e059e1ecf98c5f. The SPLASH is split into four blocks:
+
+  1) Identifer Block: first block (splash10) encodes the SPLASH
+  identifier. The first number is the measurement type (1 for MS, 2 and above for other data types to be included in the future) and the second number is the SPLASH version. splash10 is a
+  SPLASH identifier for MS, version 0.
+
+The second and third blocks are spectral summaries, which can be used to prefilter and restrict searches, and find similar spectra. In the second and third blocks, intensities are summed over fixed (but different) bin sizes and wrapped over ten bins. The wrapped bin (zero-based) index for a given ion is computed as floor (m/z ÷ BinSize) modulo 10.
+
+  2) Top Ten Block:  The second block (0002) is formed using the top ten or fewer ions greater than 10% of the base peak). This reduced spectrum is summed over bins of 5 Da. Each bin is then scaled to a
+  single-digit integral value in base 3 (0–2), and the resulting 10 digit histogram is converted
+  to a base 36 number, resulting in a 4-digit block.
+
+  3) Histogram Block: In the third block (0900000000) the intensities are summed over 100-Da bin
+  sizes, each bin is then scaled to a single-digit, integral base-10 digit (0–9).
+
 
 ## Installation
 
@@ -38,7 +58,7 @@ spectrum = [
 ]
 
 SpectrumHash.from_peaks(spectrum).splash
-# => "splash10-z400010000-d64778f5782df78f3910"
+# => "splash10-0006-9100000000-5405bffe0624d866f870"
 ```
 
 Create a splash from a tab delimited list of peaks and strings.
@@ -54,14 +74,14 @@ spectrum = <<-TXT
 TXT
 
 SpectrumHash.from_string(spectrum).splash
-# => "splash10-z400010000-d64778f5782df78f3910"
+# => "splash10-0006-9100000000-b0cf38693934211e4e35"
 ```
 
 There are a couple methods to get the different components of the
 splash
 ```ruby
 
-splash = SpectrumHash.from_splash_string "splash10-z40h010000-d349672ea211ef542549"
+splash = SpectrumHash.from_splash_string "splash10-0006-9100000000-b0cf38693934211e4e35"
 
 # print the version number for the splash
 splash.version
@@ -71,24 +91,28 @@ splash.version
 splash.version_block
 # => "splash10"
 
+# print the top ten block
+splash.top_ten_block
+# => "0006"
+
 # print the histogram block
 splash.histogram_block
-# => "z40h010000"
+# => "9100000000"
 
 # print the hash block
 splash.hash_block
-# => "d349672ea211ef542549"
+# => "b0cf38693934211e4e35"
 
 # get the histogram as a list of integers (handy for comparisons)
 splash.histogram_list
-# => [35, 4, 0, 17, 0, 1, 0, 0, 0, 0]
+# => [9, 1, 0, 0, 0, 0, 0, 0, 0, 0]
 
 ```
 
 Get the manhattan distance between the histogram blocks of two splashes
 ```ruby
-splash1 = SpectrumHash.from_splash_string "splash10-z400010000-d64778f5782df78f3910"
-splash2 = SpectrumHash.from_splash_string "splash10-z40h010000-d349672ea211ef542549"
+splash1 = SpectrumHash.from_splash_string "splash10-0002-0900000000-b112e4e059e1ecf98c5f"
+splash2 = SpectrumHash.from_splash_string "splash10-0006-9100000000-b0cf38693934211e4e35"
 splash1.distance_to splash2
 # => 17
 ```
