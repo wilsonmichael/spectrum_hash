@@ -25,6 +25,9 @@ The second and third blocks are spectral summaries, which can be used to prefilt
   3) Histogram Block: In the third block (0900000000) the intensities are summed over 100-Da bin
   sizes, each bin is then scaled to a single-digit, integral base-10 digit (0–9).
 
+  4) The fourth block (b112e4e059e1ecf98c5f) is a hash of the full spectrum in Secure Hash
+    Algorithm10 SHA256 (numbers and lowercase letters only), calculated in hexadecimal
+    notation and truncated to 20 characters. The full spectrum string of m/z and relative abundance values.
 
 ## Installation
 
