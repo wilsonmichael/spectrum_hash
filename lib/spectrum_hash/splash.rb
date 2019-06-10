@@ -7,7 +7,7 @@ module SpectrumHash
   class Splash
     attr_reader :spectrum, :spectrum_type, :api_uri, :response, :splash
 
-    DEFAULT_SPLASH_API_URI = 'http://splash.fiehnlab.ucdavis.edu/splash/it'
+    DEFAULT_SPLASH_API_URI = 'https://splash.fiehnlab.ucdavis.edu/splash/it'
 
     DEFAULT_SPECTRUM_TYPE = :ms
     SPECTRUM_TYPES = {ms: 1, nmr: 2, uv_vis: 3, ir: 4, raman: 5}.freeze
